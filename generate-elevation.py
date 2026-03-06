@@ -17,8 +17,20 @@ import time
 # ---------------------------------------------------------------------------
 # Config
 # ---------------------------------------------------------------------------
-API_KEY = "AIzaSyB3MQv-vG2rZOWXkWTvMZdgBMzFSW2IhLE"
+API_KEY = None  # Loaded from ~/API_KEYS.vault at runtime
 MODEL = "gemini-3-pro-image-preview"
+
+
+def load_api_key():
+    """Read the Google API key from ~/API_KEYS.vault."""
+    vault_path = os.path.expanduser("~/API_KEYS.vault")
+    with open(vault_path, "r") as f:
+        for line in f:
+            if line.startswith("Google"):
+                parts = line.split("|", 1)
+                if len(parts) == 2:
+                    return parts[1].strip()
+    raise RuntimeError("Google API key not found in ~/API_KEYS.vault")
 ENDPOINT = (
     f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent"
 )
@@ -229,9 +241,10 @@ request_body = {
 
 payload = json.dumps(request_body).encode("utf-8")
 
+api_key = load_api_key()
 headers = {
     "Content-Type": "application/json",
-    "x-goog-api-key": API_KEY,
+    "x-goog-api-key": api_key,
 }
 
 req = urllib.request.Request(
