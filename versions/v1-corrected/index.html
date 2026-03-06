@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shutter Design Wizard</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- jsPDF for PDF generation (local copy for offline use) -->
+  <script src="jspdf.umd.min.js"></script>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>Shutter Design Wizard</h1>
+      <p class="subtitle">Custom plantation shutter plans &mdash; cutting lists, hardware, and dimensioned drawings</p>
+    </header>
+
+    <div class="wizard-container">
+      <!-- Progress bar -->
+      <div class="progress-bar">
+        <div class="progress-step active" data-step="1"><span>1</span> Louver Style</div>
+        <div class="progress-step" data-step="2"><span>2</span> Dimensions</div>
+        <div class="progress-step" data-step="3"><span>3</span> Options</div>
+        <div class="progress-step" data-step="4"><span>4</span> Results</div>
+      </div>
+
+      <!-- Step 1: Louver Size & Type -->
+      <div class="wizard-step" id="step-1">
+        <h2>Choose Your Louver Style</h2>
+
+        <div class="form-group">
+          <label>Louver Size</label>
+          <div class="card-select" id="louver-size-select">
+            <div class="card" data-value="1.25">
+              <div class="card-icon">
+                <svg viewBox="0 0 60 80" class="louver-icon"><rect x="5" y="5" width="50" height="70" fill="none" stroke="currentColor" stroke-width="2"/><line x1="10" y1="15" x2="50" y2="15" stroke="currentColor" stroke-width="1.5"/><line x1="10" y1="21" x2="50" y2="21" stroke="currentColor" stroke-width="1.5"/><line x1="10" y1="27" x2="50" y2="27" stroke="currentColor" stroke-width="1.5"/><line x1="10" y1="33" x2="50" y2="33" stroke="currentColor" stroke-width="1.5"/><line x1="10" y1="39" x2="50" y2="39" stroke="currentColor" stroke-width="1.5"/><line x1="10" y1="45" x2="50" y2="45" stroke="currentColor" stroke-width="1.5"/><line x1="10" y1="51" x2="50" y2="51" stroke="currentColor" stroke-width="1.5"/><line x1="10" y1="57" x2="50" y2="57" stroke="currentColor" stroke-width="1.5"/><line x1="10" y1="63" x2="50" y2="63" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <div class="card-label">1-1/4"</div>
+              <div class="card-desc">Traditional style, tight spacing</div>
+            </div>
+            <div class="card" data-value="2.5">
+              <div class="card-icon">
+                <svg viewBox="0 0 60 80" class="louver-icon"><rect x="5" y="5" width="50" height="70" fill="none" stroke="currentColor" stroke-width="2"/><line x1="10" y1="16" x2="50" y2="16" stroke="currentColor" stroke-width="2.5"/><line x1="10" y1="28" x2="50" y2="28" stroke="currentColor" stroke-width="2.5"/><line x1="10" y1="40" x2="50" y2="40" stroke="currentColor" stroke-width="2.5"/><line x1="10" y1="52" x2="50" y2="52" stroke="currentColor" stroke-width="2.5"/><line x1="10" y1="64" x2="50" y2="64" stroke="currentColor" stroke-width="2.5"/></svg>
+              </div>
+              <div class="card-label">2-1/2"</div>
+              <div class="card-desc">Mid-size plantation style</div>
+            </div>
+            <div class="card" data-value="3.5">
+              <div class="card-icon">
+                <svg viewBox="0 0 60 80" class="louver-icon"><rect x="5" y="5" width="50" height="70" fill="none" stroke="currentColor" stroke-width="2"/><line x1="10" y1="18" x2="50" y2="18" stroke="currentColor" stroke-width="3.5"/><line x1="10" y1="34" x2="50" y2="34" stroke="currentColor" stroke-width="3.5"/><line x1="10" y1="50" x2="50" y2="50" stroke="currentColor" stroke-width="3.5"/><line x1="10" y1="66" x2="50" y2="66" stroke="currentColor" stroke-width="3.5"/></svg>
+              </div>
+              <div class="card-label">3-1/2"</div>
+              <div class="card-desc">Large plantation style, max light</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Louver Type</label>
+          <div class="card-select" id="louver-type-select">
+            <div class="card" data-value="fixed">
+              <div class="card-label">Fixed</div>
+              <div class="card-desc">Louvers are permanently angled, glued in place</div>
+            </div>
+            <div class="card" data-value="movable-front">
+              <div class="card-label">Movable (Front Arm)</div>
+              <div class="card-desc">Louvers pivot on pins, front-mounted control arm</div>
+            </div>
+            <div class="card" data-value="movable-hidden">
+              <div class="card-label">Movable (Hidden Arm)</div>
+              <div class="card-desc">Louvers pivot on pins, rear-mounted control arm</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-buttons">
+          <div></div>
+          <button class="btn btn-primary" id="btn-next-1">Next &rarr;</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Dimensions -->
+      <div class="wizard-step hidden" id="step-2">
+        <h2>Panel Dimensions</h2>
+        <p class="step-info">Enter the <strong>finished panel</strong> dimensions (not the window opening). See the measuring guide below if unsure.</p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="panel-width">Panel Width</label>
+            <div class="input-with-unit">
+              <input type="number" id="panel-width" min="6" max="24" step="0.0625" placeholder="e.g. 15">
+              <span class="unit">inches</span>
+            </div>
+            <small>Max 24"</small>
+          </div>
+          <div class="form-group">
+            <label for="panel-height">Panel Height</label>
+            <div class="input-with-unit">
+              <input type="number" id="panel-height" min="8" max="96" step="0.0625" placeholder="e.g. 36">
+              <span class="unit">inches</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="num-panels">Number of Panels for This Window</label>
+          <select id="num-panels">
+            <option value="1">1 Panel</option>
+            <option value="2" selected>2 Panels</option>
+            <option value="3">3 Panels</option>
+            <option value="4">4 Panels</option>
+          </select>
+        </div>
+
+        <details class="measuring-guide">
+          <summary>Measuring Guide</summary>
+          <div class="guide-content">
+            <h4>Inside Mount</h4>
+            <ul>
+              <li><strong>Height:</strong> Measure the window opening height and subtract 1/4"</li>
+              <li><strong>Width:</strong> Measure the window opening width, divide by number of panels, then subtract for gaps:
+                <ul>
+                  <li>1/16" gap where hinges mount (panel edge to frame)</li>
+                  <li>1/8" gap between adjacent panels</li>
+                </ul>
+              </li>
+            </ul>
+            <h4>Outside Mount</h4>
+            <ul>
+              <li><strong>Height:</strong> Measure window opening and add desired top/bottom overlap</li>
+              <li><strong>Width:</strong> Measure window opening and add desired side overlap, then divide by number of panels</li>
+            </ul>
+          </div>
+        </details>
+
+        <div class="nav-buttons">
+          <button class="btn btn-secondary" id="btn-back-2">&larr; Back</button>
+          <button class="btn btn-primary" id="btn-next-2">Next &rarr;</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Options -->
+      <div class="wizard-step hidden" id="step-3">
+        <h2>Additional Options</h2>
+
+        <div class="form-group">
+          <label for="joinery">Frame Joinery</label>
+          <select id="joinery">
+            <option value="dowel">Dowel / Loose Tenon</option>
+            <option value="mortise-tenon">Mortise &amp; Tenon</option>
+          </select>
+          <small id="tenon-note" class="hidden">Tenon length will be added to rail cutting dimensions.</small>
+        </div>
+
+        <div class="form-group" id="tenon-length-group" style="display:none;">
+          <label for="tenon-length">Tenon Length (each side)</label>
+          <div class="input-with-unit">
+            <input type="number" id="tenon-length" min="0.25" max="2" step="0.0625" value="0.5">
+            <span class="unit">inches</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="middle-rail">
+            Add middle rail (recommended for panels over 48" tall)
+          </label>
+          <small id="middle-rail-auto-note" class="hidden" style="color: var(--warning);">Automatically recommended because your panel exceeds 48" in height.</small>
+        </div>
+
+        <div class="form-group">
+          <label for="wood-species">Wood Species (for reference only)</label>
+          <select id="wood-species">
+            <option value="basswood">Basswood (most common)</option>
+            <option value="poplar">Poplar</option>
+            <option value="cedar">Western Red Cedar</option>
+            <option value="custom">Other / Custom</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="stock-thickness">Frame Stock Thickness (finished)</label>
+          <div class="input-with-unit">
+            <input type="number" id="stock-thickness" min="1" max="1.5" step="0.0625" value="1.0625">
+            <span class="unit">inches</span>
+          </div>
+          <small>Standard is 1-1/16" (5/4 stock planed). Minimum 1".</small>
+        </div>
+
+        <div class="nav-buttons">
+          <button class="btn btn-secondary" id="btn-back-3">&larr; Back</button>
+          <button class="btn btn-primary" id="btn-next-3">Generate Plan &rarr;</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Results -->
+      <div class="wizard-step hidden" id="step-4">
+        <h2>Your Shutter Plan</h2>
+
+        <div class="results-actions">
+          <button class="btn btn-primary" id="btn-download-pdf">Download PDF</button>
+          <button class="btn btn-secondary" id="btn-print">Print</button>
+          <button class="btn btn-secondary" id="btn-start-over">Start Over</button>
+        </div>
+
+        <div id="results-content">
+          <!-- Summary -->
+          <div class="result-section" id="result-summary"></div>
+
+          <!-- Elevation Drawing -->
+          <div class="result-section">
+            <h3>Elevation Drawing</h3>
+            <div class="drawing-container">
+              <canvas id="elevation-canvas" width="500" height="700"></canvas>
+            </div>
+          </div>
+
+          <!-- Cross-Section Drawing -->
+          <div class="result-section">
+            <h3>Cross-Section Detail</h3>
+            <div class="drawing-container">
+              <canvas id="cross-section-canvas" width="500" height="300"></canvas>
+            </div>
+          </div>
+
+          <!-- Cutting List -->
+          <div class="result-section" id="result-cutting-list">
+            <h3>Cutting List</h3>
+            <table id="cutting-table">
+              <thead>
+                <tr>
+                  <th>Part</th>
+                  <th>Qty</th>
+                  <th>Width</th>
+                  <th>Length</th>
+                  <th>Thickness</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <!-- Hardware List -->
+          <div class="result-section" id="result-hardware-list">
+            <h3>Hardware &amp; Supplies</h3>
+            <table id="hardware-table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Qty</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <!-- Construction Notes -->
+          <div class="result-section" id="result-notes">
+            <h3>Construction Notes</h3>
+            <ul id="notes-list"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>Offline shutter plan generator. Dimensions based on publicly available Rockler shutter system specifications.</p>
+      <p>Not affiliated with Rockler Woodworking and Hardware.</p>
+    </footer>
+  </div>
+
+  <script src="shutter-calc.js"></script>
+  <script src="drawing.js"></script>
+  <script src="pdf-export.js"></script>
+  <script src="wizard.js"></script>
+</body>
+</html>

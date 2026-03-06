@@ -1,0 +1,12 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Generated images (re-generate via python scripts)
+*.jpg
+*.png
+
+# Editor
+*.swp
+*.swo
+*~
