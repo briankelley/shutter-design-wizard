@@ -6,6 +6,12 @@ Thumbs.db
 *.jpg
 *.png
 
+# Secrets
+.env
+.env.*
+*.vault
+API_KEYS*
+
 # Editor
 *.swp
 *.swo
